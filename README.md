@@ -1,31 +1,47 @@
 # AI Agent Content HQ
 
-Phase 1 foundation for an online AI operations platform. The repository is intentionally provider-independent and does not require a paid AI API.
+Phase 1 foundation for an online AI operations platform. The repository is provider-independent and does not require a paid AI API.
 
 ## Phase 1 status
 - Functional Node.js backend/API and browser dashboard
+- Static GitHub Pages frontend
 - Domain models for agents, tasks, workflows and activity events
 - Manager, Researcher, Writer and Reviewer agent foundations
 - Delegation/orchestration service with task lifecycle, failures and retry
 - Provider-independent `AiGateway` / `AiProvider` abstraction
 - Reviewer approval and revision decisions
-- Real-time-ready activity event model; UI polls the API in Phase 1
-- No secrets or API keys are stored in source
+- Real-time-ready activity event model
+- No secrets or API keys stored in source
 
 ## Architecture
-`Browser -> Frontend/dashboard -> HTTP API -> Orchestrator -> Agents -> AI Gateway -> Provider`
+Development:
+`Browser -> Node.js dashboard/API -> Orchestrator -> Agents -> AI Gateway -> Provider`
 
-The current dashboard is served by the backend so the foundation can run as one small service during development. For production, the frontend can be deployed separately to GitHub Pages or another static host, while the backend, database and workers run on an online service.
+GitHub Pages deployment:
+`Browser -> GitHub Pages frontend`
+
+The GitHub Pages frontend is intentionally static. It does **not** pretend to run the Node.js backend. Backend, database, workers and future real-time connections will be hosted separately online in later phases.
+
+## GitHub Pages
+The repository includes `.github/workflows/deploy-pages.yml`. Every push to `main` (or a manual workflow run) publishes the contents of `frontend/` using GitHub Pages Actions.
+
+The repository owner must enable **Settings → Pages → Source → GitHub Actions** once. GitHub documents this as the supported custom-workflow publishing flow. After the workflow succeeds, the project site will use the normal GitHub Pages project URL:
+
+`https://mohsinmosi322-maker.github.io/ai-agent-content-hq/`
+
+The first deployment can take a few minutes to become available.
 
 ## Core modules
+- `frontend/index.html` — static Phase 1 AI operations dashboard for GitHub Pages.
 - `backend/domain.js` — centralized enums and domain factories.
 - `backend/agents.js` — agent abstractions and Phase 1 agents.
 - `backend/ai.js` — provider-independent AI gateway and deterministic zero-cost development provider.
 - `backend/orchestrator.js` — workflow/task execution and activity events.
-- `backend/server.js` — dashboard and minimal API.
+- `backend/server.js` — local development dashboard and minimal API.
 - `backend/orchestrator.test.js` — core orchestration tests.
+- `.github/workflows/deploy-pages.yml` — automatic GitHub Pages deployment.
 
-## Run
+## Local development
 Requires Node.js 20+.
 
 ```bash
